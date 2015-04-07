@@ -43,8 +43,8 @@ class Station(models.Model):
                                                 'contact SatNOGS Team'))
     featured_date = models.DateField(null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    online = models.BooleanField(default=False,
-                                 help_text='Is your Ground Station functional?')
+    online = models.BooleanField(default=False)
+    last_seen = models.DateTimeField(auto_now=True, blank=True)
 
     def get_image(self):
         if self.image and hasattr(self.image, 'url'):
@@ -63,7 +63,7 @@ class Satellite(models.Model):
     tle0 = models.CharField(max_length=100, null=True)
     tle1 = models.CharField(max_length=200, null=True)
     tle2 = models.CharField(max_length=200, null=True)
-    updated = models.DateTimeField(auto_now_add=True, blank=True)
+    updated = models.DateTimeField(auto_now=True, blank=True)
 
     def __unicode__(self):
         return self.name

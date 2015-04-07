@@ -163,7 +163,8 @@ def station_edit(request):
         f.owner = request.user
         f.save()
         form.save_m2m()
-        messages.success(request, 'Successfully saved Ground Station')
+        messages.success(request, ('Successfully saved Ground Station. '
+                                   'Run the Health Check to activate it.'))
         return redirect(reverse('base:station_view', kwargs={'id': f.id}))
     else:
         messages.error(request, 'Some fields missing on the form')

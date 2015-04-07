@@ -15,11 +15,14 @@
       data-id="{{ station.id }}"
       data-lng="{{ station.lng }}"
       data-lat="{{ station.lat }}">
-     {{ station.id }} - {{ station.name }}
+        {{ station.id }} - {{ station.name }}
+        {% if station.online %}
+          <span class="label label-success">Online</span>
+        {% else %}
+          <span class="label label-success"Offline</button>
+        {% endif %}
     {% if request.user == station.owner %}
       <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#StationModal">Edit Ground Station</button>
-      <!-- Station Modal -->
-      {% include 'includes/station_edit.html' %}
     {% endif %}
   </h2
 
@@ -29,7 +32,11 @@
         <span class="label label-default">Owner</span>
         <span class="gs-front-data">
           <a href="{% url 'users:view_user' username=station.owner.username %}">
-            {{ station.owner.get_full_name }}
+            {% if station.owner.get_full_name %}
+              {{ station.owner.get_full_name }}
+            {% else %}
+              {{ station.owner.username }}
+            {% endif %}
           </a>
         </span>
       </div>
@@ -56,6 +63,13 @@
         <span class="gs-front-data"
               title="{{ station.created|date:"c" }}">
           {{ station.created|timesince }} ago
+        </span>
+      </div>
+      <div class="gs-front-line">
+        <span class="label label-default">Last Seen</span>
+        <span class="gs-front-data"
+              title="{{ station.last_seen|date:"c" }}">
+          {{ station.last_seen|timesince }} ago
         </span>
       </div>
     </div>
@@ -88,6 +102,11 @@
       <div id="map-station"></div>
     </div>
   </div>
+
+  {% if request.user == station.owner %}
+    <!-- Station Modals -->
+    {% include 'includes/station_edit.html' %}
+  {% endif %}
 {% endblock content %}
 
 {% block javascript %}
